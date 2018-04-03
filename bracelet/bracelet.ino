@@ -231,7 +231,7 @@ void esp_station_init() {
             continue;      
         }
         
-        /* Установить соединение с TCP сервером */
+        /* Установить TCP соединение с сервером */
         establish_tcp_server_connection();
         
         /* Ожидание запроса имени браслета от сервера */
