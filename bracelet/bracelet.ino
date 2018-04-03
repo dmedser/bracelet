@@ -27,6 +27,8 @@
 #define CIRC_BUF_LEN                            30
 #define BRACELET_DROP_TRESHOLD                  1000
 
+#define MS_IN_MIN                               60000.0f
+
 /* Имя и пароль WiFi сети: AT+CWJAP_DEF="<SSID>","<passwrd>" */
 const char *wifi_connection_str = "AT+CWJAP_DEF=\"Columbia 3.0\",\"allisinvain\"\r\n";
 /* Номер браслета: *BRACELET_<number>& */
@@ -187,7 +189,7 @@ void establish_wifi_connection() {
 
 
 void establish_tcp_server_connection() {
-    /* До тех пор пока соедниение с tcp сервером в течение TIMEOUT_MS_TCP_SERVER_CONNECTION не установлено */
+    /* До тех пор пока TCP соедниение c сервером в течение TIMEOUT_MS_TCP_SERVER_CONNECTION не установлено */
     while(!esp_str_is_received("OK\r\n", ESP_TIMEOUT_MS_TCP_SERVER_CONNECTION, tcp_server_connection_str)) {
         /* Ввести ESP866 в режим deep sleep на 5 сек и ожидать пока ESP8266 получит IP */
         while(!esp_str_is_received("WIFI GOT IP\r\n", ESP_TIMEOUT_MS_DEEP_SLEEP_WAKE_UP + ESP_TIMEOUT_MS_WIFI_GETTING_IP, deep_sleep_enter_cmd));
@@ -308,7 +310,6 @@ void esp_send_sbatt() {
                           ADC_SBATT_RAW_VAL_MIN, ADC_SBATT_RAW_VAL_MAX, 
                           SBATT_PERCENTAGE_MIN, SBATT_PERCENTAGE_MAX);
                           
-    
     char sbatt_cmd[20] = {0};
     sprintf(sbatt_cmd, "*S=$C=SBATT$P=%d&\r\n", adc_val_percent);
     
@@ -396,7 +397,7 @@ void esp_process() {
     }   
 }
 
-/* Конечный автомат MAX */
+/* Конечный автомат MAX30100 */
 void max_process() {
     switch(max_state) {
     case MAX_STATE_IDLE:
@@ -426,7 +427,7 @@ void max_process() {
                       if(!max_peak_is_detected) {
                           max_peak_delta = millis() - max_last_peak_timestamp;
                           max_last_peak_timestamp = millis();
-                          pulse_buf.add(60000.0 / (float)max_peak_delta);
+                          pulse_buf.add(MS_IN_MIN / (float)max_peak_delta);
                           max_peak_is_detected = true;
                       }
                   }
