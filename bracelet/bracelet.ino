@@ -30,7 +30,7 @@
 #define MS_IN_MIN                               60000.0f
 
 /* Имя и пароль WiFi сети: AT+CWJAP_DEF="<SSID>","<passwrd>" */
-const char *wifi_connection_str = "AT+CWJAP_DEF=\"Columbia 3.0\",\"allisinvain\"\r\n";
+const char *wifi_connection_str = "AT+CWJAP_DEF=\"<SSID>\",\"<password>\"\r\n";
 /* Номер браслета: *BRACELET_<number>& */
 const char *bracelet_num = "*BRACELET_1&\r\n";
 /* MAC адрес браслета: AT+CIPSTAMAC_DEF="<mac address>" */    
